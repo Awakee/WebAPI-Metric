@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WebApi_MetricVisualization.Interact;
 using Microsoft.EntityFrameworkCore;
+using MySql.Data.MySqlClient;
+
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -51,6 +53,26 @@ namespace WebApi_MetricVisualization.Controllers
             Methods getData = new Methods();
             getData.DeleteMetric(metricName);
         }
+
+
+        //GET: metric/check
+        [HttpGet("check")]
+        public string GetConnection()
+        {
+            dbconnection db = new dbconnection();
+            string connect = db.ConnectBD();
+            try
+            {
+                MySqlConnection getdb = new MySqlConnection(connect);
+                return "Connection successful!";
+
+            }
+            catch(Exception e)
+            {
+                return connect + "Error:" + e.Message;
+            }
+        }
        
+        
     }
 }
