@@ -17,13 +17,13 @@ namespace WebApi_MetricVisualization.Controllers
 
     public class MetricController : Controller
     {
-        
+        Methods getData = new Methods();
+
         //GET: metric/get/{metricName}
         [HttpGet("get/{metricName}")]
 
         public string GetData(string metricName)
         {
-            Methods getData = new Methods();
             return getData.GetMetrics(metricName);
         }
 
@@ -31,9 +31,7 @@ namespace WebApi_MetricVisualization.Controllers
         [HttpPost("set/{metricName}")]
         public void SetData(string metricName)
         {
-            Methods getData = new Methods();
             getData.SetMetric(metricName);
-
         }
         
 
@@ -41,7 +39,6 @@ namespace WebApi_MetricVisualization.Controllers
         [HttpPost("clear/{metricName}")]
         public void ClearData(string metricName)
         {
-            Methods getData = new Methods();
             getData.ClearValue(metricName);
 
         }
@@ -50,7 +47,6 @@ namespace WebApi_MetricVisualization.Controllers
         [HttpPost("delete/{metricName}")]
         public void DeleteData(string metricName)
         {
-            Methods getData = new Methods();
             getData.DeleteMetric(metricName);
         }
 
@@ -59,19 +55,9 @@ namespace WebApi_MetricVisualization.Controllers
         [HttpGet("check")]
         public string GetConnection()
         {
-            dbconnection db = new dbconnection();
-            string connect = db.ConnectBD();
-            try
-            {
-                MySqlConnection getdb = new MySqlConnection(connect);
-                return "Connection successful!";
-
-            }
-            catch(Exception e)
-            {
-                return connect + "Error:" + e.Message;
-            }
+            return getData.GetConnection();
         }
+
        
         
     }

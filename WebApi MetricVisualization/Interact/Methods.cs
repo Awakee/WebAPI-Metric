@@ -98,9 +98,19 @@ namespace WebApi_MetricVisualization.Interact
 
         }
 
-        public string test()
+        public string GetConnection()
         {
-            return "we here";
+            dbconnection db = new dbconnection();
+            string connect = db.ConnectBD();
+            try
+            {
+                MySqlConnection getdb = new MySqlConnection(connect);
+                return "Connection successful!";
+            }
+            catch (Exception e)
+            {
+                return connect + "Error:" + e.Message;
+            }
         }
     }
 }
