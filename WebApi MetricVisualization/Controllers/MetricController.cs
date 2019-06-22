@@ -17,48 +17,39 @@ namespace WebApi_MetricVisualization.Controllers
 
     public class MetricController : Controller
     {
-        Methods getData = new Methods();
+        Methods getMethod = new Methods();
 
         //GET: metric/get/{metricName}
         [HttpGet("get/{metricName}")]
 
-        public string GetData(string metricName)
+        public string GetMetric(string metricName)
         {
-            return getData.GetMetrics(metricName);
+            return getMethod.GetMetrics(metricName);
         }
 
         //POST: metric/set/{metricName}
         [HttpPost("set/{metricName}")]
-        public void SetData(string metricName)
+        public string SetData(string metricName)
         {
-            getData.SetMetric(metricName);
+           return getMethod.SetMetric(metricName);
         }
-        
+
 
         //POST: metric/clear/{metricName}
         [HttpPost("clear/{metricName}")]
-        public void ClearData(string metricName)
+        public string ClearData(string metricName)
         {
-            getData.ClearValue(metricName);
+            return getMethod.ClearValue(metricName);
 
         }
 
         //POST: metric/delete/{metricName}
         [HttpPost("delete/{metricName}")]
-        public void DeleteData(string metricName)
+        public string DeleteData(string metricName)
         {
-            getData.DeleteMetric(metricName);
+            return getMethod.DeleteMetric(metricName);
         }
 
 
-        //GET: metric/check
-        [HttpGet("check")]
-        public string GetConnection()
-        {
-            return getData.GetConnection();
-        }
-
-       
-        
     }
 }

@@ -15,7 +15,7 @@ namespace WebApi_MetricVisualization.Interact
             string database = "metric_db";
             string username = "root";
             string password = "1234";
-            string connect = ($"server={host};port={port};database={database};uid={username};pwd={password}");
+            string connect = ($"server={host};port={port};database={database};uid={username};pwd={password};");
             return connect;
         }
         
