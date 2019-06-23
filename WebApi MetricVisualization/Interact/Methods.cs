@@ -14,6 +14,7 @@ namespace WebApi_MetricVisualization.Interact
         {
             try
             {
+                //проверяем на существование
                 if (CheckExist(metricName))
                 {
                     string result = null;
@@ -22,18 +23,14 @@ namespace WebApi_MetricVisualization.Interact
                     int id = GetID(metricName);
                     string requestDate = $"SELECT * FROM metric_value WHERE Id='{id}'";
                     result += GetConnection(requestDate, "getDate");
-
                     return result;
-
                 }
                 return null;
-
             }
             catch(Exception e)
             {
                 return "Error:" + e.Message;
             }
-
         }
 
         //Проверяем существования записи.
@@ -51,6 +48,7 @@ namespace WebApi_MetricVisualization.Interact
             }
         }
 
+        //получаем ID в БД по значению.
         public int GetID(string metricName)
         {
             if (CheckExist(metricName)){
@@ -102,7 +100,7 @@ namespace WebApi_MetricVisualization.Interact
         {
             try
             {
-                //берем строку для подключения
+                //подключаемся к БД + выполняем запрос
                 dbconnection db = new dbconnection();
                 string connectdb = db.ConnectBD();
                 MySqlConnection connect = new MySqlConnection(connectdb);
@@ -112,23 +110,23 @@ namespace WebApi_MetricVisualization.Interact
 
                 switch (operationName)
                 {
-                    case "getId":
+                    case "getId":                   //получаем ID последней записи
                         long id = command.LastInsertedId;
                         connect.Close();
                         return id.ToString();
-                    case "general":
+                    case "general":                 //выполнение запроса + получение ответа
                         return reader.Read().ToString();
-                    case "existId":
+                    case "existId":                 //получаем ID по значению(запросу)
                         reader.Read();
                         return reader[0].ToString();
-                    case "getData":
+                    case "getData":                 //получение всей информации по запросу
                         string result = null;
                         while (reader.Read())
                         {
                             result += "ID:" + reader[0].ToString() + "\t Name: " + reader[1].ToString() + "\n";
                         }
                         return result;
-                    case "getDate":
+                    case "getDate":                 //получаем дату по запросу
                         string resultDate = null;
                         while (reader.Read())
                         {
@@ -136,7 +134,6 @@ namespace WebApi_MetricVisualization.Interact
                         }
                         return resultDate;
                 }
-               
                 return "Error";
             }
             catch (Exception e)
@@ -146,6 +143,7 @@ namespace WebApi_MetricVisualization.Interact
 
         }
 
+        //удаляем значения дат по ID
         public string ClearValue(string metricName)
         {
             if (CheckExist(metricName))
@@ -166,6 +164,7 @@ namespace WebApi_MetricVisualization.Interact
             return null;
         }
 
+        //удаляем метрику по ID
         public string DeleteMetric(string metricName)
         {
             if (CheckExist(metricName))
@@ -186,8 +185,6 @@ namespace WebApi_MetricVisualization.Interact
                 }
             }
             return null;
-        }
-
-        
+        }  
     }
 }
