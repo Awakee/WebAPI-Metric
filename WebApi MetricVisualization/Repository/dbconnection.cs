@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 
-namespace WebApi_MetricVisualization.Interact
+namespace WebApi_MetricVisualization.Repository
 {
     public class dbconnection
     {

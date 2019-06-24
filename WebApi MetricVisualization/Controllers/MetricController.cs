@@ -1,55 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using WebApi_MetricVisualization.Interact;
-using Microsoft.EntityFrameworkCore;
-using MySql.Data.MySqlClient;
+﻿using Microsoft.AspNetCore.Mvc;
+using WebApi_MetricVisualization.Models;
+using WebApi_MetricVisualization.Repository;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace WebApi_MetricVisualization.Controllers
 {
-    [Route("api/metric")]
+    [Route( "api/metric" )]
     [ApiController]
 
     public class MetricController : Controller
     {
-        Methods getMethod = new Methods();
+        SqlRepository getMethod = new SqlRepository();
 
         //GET: metric/get/{metricName}
-        [HttpGet("get/{metricName}")]
+        [HttpGet( "get/{metricName}" )]
 
-        public string GetMetric(string metricName)
+        public Metric GetMetric( string metricName )
         {
-            return getMethod.GetMetrics(metricName);
+            return getMethod.GetMetrics( metricName );
         }
 
         //POST: metric/set/{metricName}
-        [HttpPost("set/{metricName}")]
-        public string SetData(string metricName)
+        [HttpPost( "set/{metricName}" )]
+        public void SetData( string metricName )
         {
-           return getMethod.SetMetric(metricName);
+            getMethod.SetMetric( metricName );
         }
 
 
         //POST: metric/clear/{metricName}
-        [HttpPost("clear/{metricName}")]
-        public string ClearData(string metricName)
+        [HttpPost( "clear/{metricName}" )]
+        public void ClearData( string metricName )
         {
-            return getMethod.ClearValue(metricName);
+            getMethod.DeleteMetricValue( metricName );
 
         }
 
         //POST: metric/delete/{metricName}
-        [HttpPost("delete/{metricName}")]
-        public string DeleteData(string metricName)
+        [HttpPost( "delete/{metricName}" )]
+        public void DeleteData( string metricName )
         {
-            return getMethod.DeleteMetric(metricName);
+            getMethod.DeleteMetric( metricName );
         }
-
-
     }
 }
