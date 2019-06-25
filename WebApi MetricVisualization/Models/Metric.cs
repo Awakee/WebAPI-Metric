@@ -10,5 +10,6 @@ namespace WebApi_MetricVisualization.Models
         public int Id;
         public string Name;
         public List<DateTime> Values = new List<DateTime>();
+        public List<int> count = new List<int>();
     }
 }

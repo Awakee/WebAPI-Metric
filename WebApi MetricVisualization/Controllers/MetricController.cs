@@ -44,5 +44,11 @@ namespace WebApi_MetricVisualization.Controllers
         {
             getMethod.DeleteMetric( metricName );
         }
+
+        [HttpGet( "test/{metricName}" )]
+        public Metric test( string metricName )
+        {
+            return getMethod.GetMetricByTime( metricName );
+        }
     }
 }
