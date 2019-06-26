@@ -9,11 +9,13 @@ namespace WebApi_MetricVisualization.Repository
     public class SqlRepository
     {
 
-        /*private readonly IConfiguration configuration;
+        /*
+        private readonly IConfiguration configuration;
         public SqlRepository( IConfiguration config )
         {
             configuration = config;
-        }*/
+        }
+        */
 
 
         public MySqlConnection GetConnection()
@@ -153,12 +155,6 @@ namespace WebApi_MetricVisualization.Repository
                 DeleteMetricName( metricName );
             }
         }
-
-
-
-
-
-
 
 
         ///TEST
