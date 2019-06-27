@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using WebApi_MetricVisualization.Models;
 using WebApi_MetricVisualization.Repository;
+using WebApi_MetricVisualization.MetricAgregator;
 
 namespace WebApi_MetricVisualization.Controllers
 {
@@ -13,9 +14,13 @@ namespace WebApi_MetricVisualization.Controllers
     public class MetricController : Controller
     {
         private readonly SqlRepository SqlRepository;
+        private readonly Agregator Agregator;
+
+
         public MetricController( IConfiguration config)
         {
             SqlRepository = new SqlRepository( config );
+            Agregator = new Agregator( config );
         }
 
         [HttpGet( "get/{metricName}" )]
@@ -34,7 +39,6 @@ namespace WebApi_MetricVisualization.Controllers
         public void ClearData( string metricName )
         {
             SqlRepository.DeleteMetricValue( metricName );
-
         }
 
         [HttpPost( "delete/{metricName}" )]
@@ -47,6 +51,12 @@ namespace WebApi_MetricVisualization.Controllers
         public Dictionary<int, DateTime> InfoMetric( string metricName )
         {
             return SqlRepository.GetMetricByTime( metricName );
+        }
+
+        [HttpGet( "interval/{metricName}" )]
+        public int[,] Interval( string metricName )
+        {
+            return Agregator.GetCounts( metricName );
         }
     }
 }

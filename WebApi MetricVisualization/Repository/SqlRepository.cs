@@ -3,6 +3,7 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using WebApi_MetricVisualization.Models;
+using WebApi_MetricVisualization.MetricAgregator;
 
 namespace WebApi_MetricVisualization.Repository
 {
@@ -23,7 +24,7 @@ namespace WebApi_MetricVisualization.Repository
             return connect;   
         } 
 
-        public int GetID( string metricName )
+        public int GetId( string metricName )
         {
             int id = 0;
             string request = $"SELECT Id FROM metric_name WHERE metric_name='{metricName}'";
@@ -41,7 +42,7 @@ namespace WebApi_MetricVisualization.Repository
 
         public void SetMetric( string metricName )
         {
-            int id = GetID( metricName );
+            int id = GetId( metricName );
             if (id > 0)
             {
                 AddNewMetricValue( id );
@@ -93,7 +94,7 @@ namespace WebApi_MetricVisualization.Repository
         public Metric GetMetrics( string metricName )
         {
             Metric metric = new Metric();
-            int id = GetID( metricName );
+            int id = GetId( metricName );
             if (id > 0)
             {
                 metric.Name = metricName;
@@ -107,7 +108,7 @@ namespace WebApi_MetricVisualization.Repository
 
         public void DeleteMetricValue( string metricName )
         {
-            int id = GetID( metricName );
+            int id = GetId( metricName );
             string request = $"DELETE FROM metric_value WHERE Id={id}";
             if (id > 0)
             {
@@ -121,7 +122,7 @@ namespace WebApi_MetricVisualization.Repository
 
         public void DeleteMetricName( string metricName )
         {
-            int id = GetID( metricName );
+            int id = GetId( metricName );
             string request = $"DELETE FROM metric_name WHERE Id={id}";
             if (id > 0)
             {
@@ -134,7 +135,7 @@ namespace WebApi_MetricVisualization.Repository
 
         public void DeleteMetric( string metricName )
         {
-            int id = GetID( metricName );
+            int id = GetId( metricName );
             if (id > 0)
             {
                 DeleteMetricValue( metricName );
@@ -144,7 +145,7 @@ namespace WebApi_MetricVisualization.Repository
 
         public Dictionary<int, DateTime> GetMetricByTime(string metricName)
         {
-            int id = GetID( metricName );
+            int id = GetId( metricName );
             string request = $"SELECT TIME(metric_date), Count(*) FROM metric_value WHERE id = {id} AND (metric_date BETWEEN CURRENT_TIME - INTERVAL 10 MINUTE AND CURRENT_TIME) GROUP BY MINUTE(metric_date)";
             Dictionary<int, DateTime> data = new Dictionary<int, DateTime>();
             MySqlConnection connect = GetConnection();
