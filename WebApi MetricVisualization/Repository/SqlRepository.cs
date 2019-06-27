@@ -9,25 +9,18 @@ namespace WebApi_MetricVisualization.Repository
     public class SqlRepository
     {
 
-        /*
         private readonly IConfiguration configuration;
         public SqlRepository( IConfiguration config )
         {
             configuration = config;
         }
-        */
-
 
         public MySqlConnection GetConnection()
         {
-            dbconnection db = new dbconnection();
-            string connectdb = db.ConnectBD();
-            
-            //string asd = configuration.GetConnectionString( "DefaultConnection" );
-            MySqlConnection connect = new MySqlConnection( connectdb );
-            return connect;
-
-            
+            string connectionString = configuration.GetConnectionString( "DefaultConnection" );
+            MySqlConnection connect = new MySqlConnection( connectionString );
+            connect.Open();
+            return connect;   
         } 
 
         public int GetID( string metricName )
@@ -35,7 +28,6 @@ namespace WebApi_MetricVisualization.Repository
             int id = 0;
             string request = $"SELECT Id FROM metric_name WHERE metric_name='{metricName}'";
             MySqlConnection connect = GetConnection();
-            connect.Open();
             MySqlCommand command = new MySqlCommand( request, connect );
             MySqlDataReader reader = command.ExecuteReader();
             while (reader.Read())
@@ -61,13 +53,11 @@ namespace WebApi_MetricVisualization.Repository
             }
         }
 
-
         public int AddNewMetric( string metricName )
         {
             long id = 0;
             string request = $"INSERT metric_name(metric_name) VALUES ('{metricName}')";
             MySqlConnection connect = GetConnection();
-            connect.Open();
             MySqlCommand command = new MySqlCommand( request, connect );
             command.ExecuteReader();
             id = command.LastInsertedId;
@@ -80,7 +70,6 @@ namespace WebApi_MetricVisualization.Repository
         {
             string request = $"INSERT metric_value(Id, metric_date) VALUES ({id}, '{DateTime.Now.ToString( "yyyy-MM-dd HH:mm:ss" )}')";
             MySqlConnection connect = GetConnection();
-            connect.Open();
             MySqlCommand command = new MySqlCommand( request, connect );
             command.ExecuteReader();
             connect.Close();
@@ -91,7 +80,6 @@ namespace WebApi_MetricVisualization.Repository
             List<DateTime> list = new List<DateTime>();
             string request = $"SELECT * FROM metric_value WHERE Id='{id}'";
             MySqlConnection connect = GetConnection();
-            connect.Open();
             MySqlCommand command = new MySqlCommand( request, connect );
             MySqlDataReader reader = command.ExecuteReader();
             while (reader.Read())
@@ -124,7 +112,6 @@ namespace WebApi_MetricVisualization.Repository
             if (id > 0)
             {
                 MySqlConnection connect = GetConnection();
-                connect.Open();
                 MySqlCommand command = new MySqlCommand( request, connect );
                 command.ExecuteReader();
                 connect.Close();
@@ -139,7 +126,6 @@ namespace WebApi_MetricVisualization.Repository
             if (id > 0)
             {
                 MySqlConnection connect = GetConnection();
-                connect.Open();
                 MySqlCommand command = new MySqlCommand( request, connect );
                 command.ExecuteReader();
                 connect.Close();
@@ -156,30 +142,20 @@ namespace WebApi_MetricVisualization.Repository
             }
         }
 
-
-        ///TEST
-        public Metric GetMetricByTime(string metricName)
+        public Dictionary<int, DateTime> GetMetricByTime(string metricName)
         {
-            Metric metric = new Metric();
             int id = GetID( metricName );
             string request = $"SELECT TIME(metric_date), Count(*) FROM metric_value WHERE id = {id} AND (metric_date BETWEEN CURRENT_TIME - INTERVAL 10 MINUTE AND CURRENT_TIME) GROUP BY MINUTE(metric_date)";
-            List<DateTime> dates = new List<DateTime>();
-            List<int> count = new List<int>();
+            Dictionary<int, DateTime> data = new Dictionary<int, DateTime>();
             MySqlConnection connect = GetConnection();
-            connect.Open();
             MySqlCommand command = new MySqlCommand( request, connect );
             MySqlDataReader reader = command.ExecuteReader();
             while (reader.Read())
             {
-                dates.Add( Convert.ToDateTime(reader[0].ToString()) );
-                count.Add( Convert.ToInt32(reader[1]) );
+                data.Add( Convert.ToInt32( reader[1] ), Convert.ToDateTime( reader[0].ToString() ) );
             }
-            metric.Name = metricName;
-            metric.Id = id;
-            metric.Values = dates;
-            metric.count = count;
             connect.Close();
-            return metric;
+            return data;
         }
 
     }

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
 using WebApi_MetricVisualization.Models;
 using WebApi_MetricVisualization.Repository;
-
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace WebApi_MetricVisualization.Controllers
 {
@@ -12,43 +12,41 @@ namespace WebApi_MetricVisualization.Controllers
 
     public class MetricController : Controller
     {
-        SqlRepository getMethod = new SqlRepository();
-
-        //GET: metric/get/{metricName}
-        [HttpGet( "get/{metricName}" )]
-
-        public Metric GetMetric( string metricName )
+        private readonly SqlRepository SqlRepository;
+        public MetricController( IConfiguration config)
         {
-            return getMethod.GetMetrics( metricName );
+            SqlRepository = new SqlRepository( config );
         }
 
-        //POST: metric/set/{metricName}
+        [HttpGet( "get/{metricName}" )]
+        public Metric GetMetric( string metricName )
+        {
+            return SqlRepository.GetMetrics( metricName );
+        }
+
         [HttpPost( "set/{metricName}" )]
         public void SetData( string metricName )
         {
-            getMethod.SetMetric( metricName );
+            SqlRepository.SetMetric( metricName );
         }
 
-
-        //POST: metric/clear/{metricName}
         [HttpPost( "clear/{metricName}" )]
         public void ClearData( string metricName )
         {
-            getMethod.DeleteMetricValue( metricName );
+            SqlRepository.DeleteMetricValue( metricName );
 
         }
 
-        //POST: metric/delete/{metricName}
         [HttpPost( "delete/{metricName}" )]
         public void DeleteData( string metricName )
         {
-            getMethod.DeleteMetric( metricName );
+            SqlRepository.DeleteMetric( metricName );
         }
 
-        [HttpGet( "test/{metricName}" )]
-        public Metric test( string metricName )
+        [HttpGet( "info/{metricName}" )]
+        public Dictionary<int, DateTime> InfoMetric( string metricName )
         {
-            return getMethod.GetMetricByTime( metricName );
+            return SqlRepository.GetMetricByTime( metricName );
         }
     }
 }

@@ -19,8 +19,8 @@ namespace WebApi_MetricVisualization
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-        }
 
+        }
 
 
         public IConfiguration Configuration { get; }
@@ -40,6 +40,7 @@ namespace WebApi_MetricVisualization
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
             }
             else
             {
@@ -47,8 +48,11 @@ namespace WebApi_MetricVisualization
                 app.UseHsts();
             }
 
+
             app.UseHttpsRedirection();
             app.UseMvc();
         }
+
     }
+
 }
