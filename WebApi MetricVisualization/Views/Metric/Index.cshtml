@@ -1,0 +1,89 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Metric graphic</h1>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+<body style="width: 100%">
+
+    <canvas id="myChart" width="1200" height="600"></canvas>
+    <style>
+
+    </style>
+
+    <script>
+        var newmassive;
+
+        setInterval(function () {
+
+            $.ajax({
+                url: "https://localhost:44367/api/metric/interval/gg",
+                success: function (data) {
+                    setInterval(callback(data), 1000);
+                }
+            });
+
+            function callback(data) {
+                newmassive = data;
+                console.log(newmassive);
+
+                function time() {
+                    var res = [];
+                    for (var i = 0; i < newmassive.length; i++) {
+                        res.push(newmassive[i][0]);
+                    }
+                    return res;
+                }
+
+                function count() {
+                    var res = [];
+                    for (var i = 0; i < newmassive.length; i++) {
+                        res.push(newmassive[i][1]);
+                    }
+
+                    return res;
+                }
+
+                var ctx = document.getElementById('myChart').getContext('2d');
+                var myLineChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: time(),
+                        datasets: [{
+                            label: '# of counts',
+                            data: count(),
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            fill: false,
+                        }]
+                    },
+
+                });
+            };
+
+
+        }, 3000);
+
+
+    </script>
+
+</body>

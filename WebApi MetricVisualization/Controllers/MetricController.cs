@@ -13,9 +13,14 @@ namespace WebApi_MetricVisualization.Controllers
 
     public class MetricController : Controller
     {
+        public IActionResult Index()
+        {
+
+            return View();
+        }
+
         private readonly SqlRepository SqlRepository;
         private readonly Agregator Agregator;
-
 
         public MetricController( IConfiguration config)
         {
@@ -57,6 +62,8 @@ namespace WebApi_MetricVisualization.Controllers
         public int[,] Interval( string metricName )
         {
             return Agregator.GetCounts( metricName );
+            
         }
+
     }
 }
