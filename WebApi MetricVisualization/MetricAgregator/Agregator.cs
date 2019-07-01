@@ -18,7 +18,6 @@ namespace WebApi_MetricVisualization.MetricAgregator
         public int[,] GetCounts(string metricName)
         {
 
-            int[,] array = new int[25, 2];
             int[,] arrayTime = GetTimeInterval();
             Dictionary<int, DateTime> newdata = new Dictionary<int, DateTime>();
             newdata = SqlRepository.GetMetricByTime( metricName );

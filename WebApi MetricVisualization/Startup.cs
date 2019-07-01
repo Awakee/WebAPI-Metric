@@ -48,7 +48,7 @@ namespace WebApi_MetricVisualization
                 app.UseHsts();
             }
 
-
+            app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseMvc();
         }
