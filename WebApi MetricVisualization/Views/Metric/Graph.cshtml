@@ -1,6 +1,7 @@
 ﻿
 @{
-   Layout = "_Layout";
+    Layout = "_Layout";
+    var x = @ViewBag.result;
 }
 
 <h1>QQQ</h1>
@@ -12,5 +13,6 @@
 <script src="https://localhost:44367/js/script.js"></script>
 
 <body style="width: 100%">
+    <script> var metricName = '@ViewBag.result' </script>
     <canvas id="myChart" width="1200" height="600"></canvas>
 </body>

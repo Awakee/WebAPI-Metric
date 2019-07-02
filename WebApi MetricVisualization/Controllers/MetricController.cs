@@ -67,9 +67,9 @@ namespace WebApi_MetricVisualization.Controllers
         }
 
         [Route( "graph/{metricName}" )]
-        public IActionResult Graph()
+        public IActionResult Graph(string metricName)
         {
-            
+            ViewBag.result = metricName;
             return View();
         }
 
