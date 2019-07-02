@@ -7,7 +7,7 @@ using WebApi_MetricVisualization.MetricAgregator;
 
 namespace WebApi_MetricVisualization.Repository
 {
-    public class SqlRepository
+    public class SqlRepository : ISqlRepository
     {
 
         private readonly IConfiguration configuration;
@@ -19,16 +19,16 @@ namespace WebApi_MetricVisualization.Repository
         public MySqlConnection GetConnection()
         {
             string connectionString = configuration.GetConnectionString( "DefaultConnection" );
-            MySqlConnection connect= new MySqlConnection( connectionString );
+            MySqlConnection connect = new MySqlConnection( connectionString );
             connect.Open();
-            return connect;   
-        } 
+            return connect;
+        }
 
         public int GetId( string metricName )
         {
             int id = 0;
             string request = $"SELECT Id FROM metric_name WHERE metric_name='{metricName}'";
-            using ( MySqlConnection connect = GetConnection() )
+            using (MySqlConnection connect = GetConnection())
             {
                 MySqlCommand command = new MySqlCommand( request, connect );
                 MySqlDataReader reader = command.ExecuteReader();
@@ -59,30 +59,30 @@ namespace WebApi_MetricVisualization.Repository
         {
             long id = 0;
             string request = $"INSERT metric_name(metric_name) VALUES ('{metricName}')";
-            using ( MySqlConnection connect = GetConnection() )
+            using (MySqlConnection connect = GetConnection())
             {
                 MySqlCommand command = new MySqlCommand( request, connect );
                 command.ExecuteReader();
                 id = command.LastInsertedId;
-            }    
+            }
             return Convert.ToInt32( id );
         }
 
         public void AddNewMetricValue( int id )
         {
             string request = $"INSERT metric_value(Id, metric_date) VALUES ({id}, '{DateTime.Now.ToString( "yyyy-MM-dd HH:mm:ss" )}')";
-            using ( MySqlConnection connect = GetConnection() )
+            using (MySqlConnection connect = GetConnection())
             {
                 MySqlCommand command = new MySqlCommand( request, connect );
                 command.ExecuteReader();
-            }    
+            }
         }
 
         public List<DateTime> GetMetricValues( int id )
         {
             List<DateTime> list = new List<DateTime>();
             string request = $"SELECT * FROM metric_value WHERE Id='{id}'";
-            using ( MySqlConnection connect = GetConnection() )
+            using (MySqlConnection connect = GetConnection())
             {
                 MySqlCommand command = new MySqlCommand( request, connect );
                 MySqlDataReader reader = command.ExecuteReader();
@@ -90,7 +90,7 @@ namespace WebApi_MetricVisualization.Repository
                 {
                     list.Add( Convert.ToDateTime( reader[1] ) );
                 }
-            } 
+            }
             return list;
         }
 
@@ -115,11 +115,11 @@ namespace WebApi_MetricVisualization.Repository
             string request = $"DELETE FROM metric_value WHERE Id={id}";
             if (id > 0)
             {
-                using ( MySqlConnection connect = GetConnection() ) 
+                using (MySqlConnection connect = GetConnection())
                 {
                     MySqlCommand command = new MySqlCommand( request, connect );
                     command.ExecuteReader();
-                }     
+                }
             }
         }
 
@@ -129,11 +129,11 @@ namespace WebApi_MetricVisualization.Repository
             string request = $"DELETE FROM metric_name WHERE Id={id}";
             if (id > 0)
             {
-                using ( MySqlConnection connect = GetConnection() )
+                using (MySqlConnection connect = GetConnection())
                 {
                     MySqlCommand command = new MySqlCommand( request, connect );
                     command.ExecuteReader();
-                }       
+                }
             }
         }
 
@@ -147,12 +147,12 @@ namespace WebApi_MetricVisualization.Repository
             }
         }
 
-        public Dictionary<int, DateTime> GetMetricByTime(string metricName)
+        public Dictionary<int, DateTime> GetMetricByTime( string metricName )
         {
             int id = GetId( metricName );
             string request = $"SELECT TIME(metric_date), Count(*) FROM metric_value WHERE id = {id} AND (metric_date BETWEEN CURRENT_TIME - INTERVAL 10 MINUTE AND CURRENT_TIME) GROUP BY MINUTE(metric_date)";
             Dictionary<int, DateTime> data = new Dictionary<int, DateTime>();
-            using ( MySqlConnection connect = GetConnection() )
+            using (MySqlConnection connect = GetConnection())
             {
                 MySqlCommand command = new MySqlCommand( request, connect );
                 MySqlDataReader reader = command.ExecuteReader();
@@ -162,6 +162,22 @@ namespace WebApi_MetricVisualization.Repository
                 }
             }
             return data;
+        }
+
+        public List<string> GetAllMetric()
+        {
+            List<string> list = new List<string>();
+            string request = $"SELECT metric_name FROM metric_name";
+            using (MySqlConnection connect = GetConnection())
+            {
+                MySqlCommand command = new MySqlCommand( request, connect );
+                MySqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    list.Add( ( reader[0].ToString() ) );
+                }
+            }
+            return list;
         }
     }
 

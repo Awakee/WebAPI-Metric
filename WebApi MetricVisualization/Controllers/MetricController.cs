@@ -8,24 +8,25 @@ using WebApi_MetricVisualization.MetricAgregator;
 
 namespace WebApi_MetricVisualization.Controllers
 {
-    [Route( "api/metric" )]
     [ApiController]
-
+    [Route( "api/metric" )]
     public class MetricController : Controller
     {
+        
         public IActionResult Index()
         {
-
+            ViewBag.result = SqlRepository.GetAllMetric();
             return View();
         }
 
         private readonly SqlRepository SqlRepository;
         private readonly Agregator Agregator;
 
-        public MetricController( IConfiguration config)
+        public MetricController( IConfiguration config, ISqlRepository sqlRepository)
         {
             SqlRepository = new SqlRepository( config );
             Agregator = new Agregator( config );
+
         }
 
         [HttpGet( "get/{metricName}" )]
@@ -64,6 +65,14 @@ namespace WebApi_MetricVisualization.Controllers
             return Agregator.GetCounts( metricName );
             
         }
+
+        [Route( "graph/{metricName}" )]
+        public IActionResult Graph()
+        {
+            
+            return View();
+        }
+
 
     }
 }
