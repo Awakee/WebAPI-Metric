@@ -4,7 +4,7 @@
     string url = "";
 }
 
-<h1>Metric graphic</h1>
+<h1></h1>
 
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
@@ -13,9 +13,12 @@
 
 
 <body style="width: 100%">
-    @foreach (string result in ViewBag.result)
-    {
-        url = $"https://localhost:44367/api/metric/graph/{result}";
-        <p><a href="@url">@result</a></p>
-    }
+    <div class="container">
+        <h1>Available metrics</h1>
+        @foreach (string result in ViewBag.result)
+        {
+            url = $"https://localhost:44367/api/metric/graph/{result}";
+            <p><a href="@url">@result</a></p>
+        }
+    </div>
 </body>
