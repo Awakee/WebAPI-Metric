@@ -15,43 +15,40 @@ namespace WebApi_MetricVisualization.MetricAgregator
         }
 
 
-        public int[,] GetCounts(string metricName)
+        public Dictionary<int, int> GetCounts(string metricName)
         {
-
-            int[,] arrayTime = GetTimeInterval();
-            Dictionary<int, DateTime> newdata = new Dictionary<int, DateTime>();
-            newdata = SqlRepository.GetMetricByTime( metricName );
-            foreach (KeyValuePair<int, DateTime> keyValue in newdata)
+            Dictionary<int, int> newdata = GetTimeInterval();
+            Dictionary<int, int> data = SqlRepository.GetMetricByTime( metricName );
+            Dictionary<int, int> result = new Dictionary<int, int>();
+            foreach (var keyValue in newdata)
             {
-                for (int i = 0; i < arrayTime.GetLength(0); i++)
                 {
-                    if (keyValue.Value.Minute == arrayTime[i, 0])
+                    if (newdata.ContainsKey(keyValue.Key) == data.ContainsKey(keyValue.Key))
                     {
-                        arrayTime[i, 1] = keyValue.Key;
+                        result.Add( keyValue.Key, data[keyValue.Key] );
+                    } else
+                    {
+                        result.Add( keyValue.Key, 0 );
                     }
                 }
                 
             }
-                return arrayTime;
+                return result;
         }
 
-        public int[,] GetTimeInterval()
+        public Dictionary<int, int> GetTimeInterval()
         {
-            int[,] array = new int[11, 2];
             DateTime time = DateTime.Now;
             time = time.AddMinutes( -10 );
             int campare = DateTime.Compare( time, DateTime.Now );
-            int i = 0;
-            Dictionary<int, int> data = new Dictionary<int, int>();
+            Dictionary<int, int> datax = new Dictionary<int, int>();
             while (campare < 0)
             {
-                array[i,0] = time.Minute;
-                i++;
+                datax.Add(time.Minute,  0);
                 time = time.AddMinutes( 1 );
                 campare = DateTime.Compare( time, DateTime.Now );
             }
-
-            return array;
+            return datax;
         }
 
     }

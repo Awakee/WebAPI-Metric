@@ -10,15 +10,18 @@
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
         crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+<link rel="stylesheet" href="https://localhost:44367/css/fm.revealator.jquery.css" />
+<script src="https://localhost:44367/js/fm.revealator.jquery.js"></script>
 
 
-<body style="width: 100%">
-    <div class="container">
-        <h1>Available metrics</h1>
+
+<body>
+    <div class="container revealator-once revealator-load revealator-slideright revealator-delay3 revealator-duration10">
+        <h1 class="revealator-once revealator-load  revealator-slidedown revealator-delay4 revealator-duration10">Available metrics</h1>
         @foreach (string result in ViewBag.result)
         {
             url = $"https://localhost:44367/api/metric/graph/{result}";
-            <p><a href="@url">@result</a></p>
+            <p class=""><a href="@url">@result</a></p>
         }
     </div>
 </body>

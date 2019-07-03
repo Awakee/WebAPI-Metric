@@ -54,13 +54,13 @@ namespace WebApi_MetricVisualization.Controllers
         }
 
         [HttpGet( "info/{metricName}" )]
-        public Dictionary<int, DateTime> InfoMetric( string metricName )
+        public Dictionary<int, int> InfoMetric( string metricName )
         {
             return SqlRepository.GetMetricByTime( metricName );
         }
 
         [HttpGet( "interval/{metricName}" )]
-        public int[,] Interval( string metricName )
+        public Dictionary<int, int> Interval( string metricName )
         {
             return Agregator.GetCounts( metricName );
             

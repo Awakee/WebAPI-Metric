@@ -1,6 +1,5 @@
 ﻿$(document).ready(function () {
     var newmassive;
-
     setInterval(function () {
 
         $.ajax({
@@ -14,20 +13,16 @@
             newmassive = data;
 
             function time() {
-                var res = [];
-                for (var i = 0; i < newmassive.length; i++) {
-                    res.push(newmassive[i][0]);
-                }
-                return res;
+                var array2 = data;
+                return Object.keys(array2);
             }
 
             function count() {
-                var res = [];
-                for (var i = 0; i < newmassive.length; i++) {
-                    res.push(newmassive[i][1]);
-                }
-
-                return res;
+                var array = new Array;
+                for (var k in data) {
+                    array.push(data[k])
+                };
+                return array;
             }
 
             function update(chart) {
@@ -39,7 +34,7 @@
             update(myLineChart);
 
         };
-    }, 3000);
+    }, 3000 );
 
     var ctx = document.getElementById('myChart').getContext('2d');
     var myLineChart = new Chart(ctx, {

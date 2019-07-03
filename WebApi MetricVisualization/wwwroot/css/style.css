@@ -12,7 +12,10 @@ h1 {
     margin-bottom: 60px;
     color: #FFFFFF;
     text-shadow: 5px 2px 20px #ffffff;
+    transition: .10s ease-out;
+    transition-delay: 5s;
 }
+
 
 .container {
     margin-top: 150px;

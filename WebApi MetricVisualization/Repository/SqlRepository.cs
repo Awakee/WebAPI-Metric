@@ -147,18 +147,18 @@ namespace WebApi_MetricVisualization.Repository
             }
         }
 
-        public Dictionary<int, DateTime> GetMetricByTime( string metricName )
+        public Dictionary<int, int> GetMetricByTime( string metricName )
         {
             int id = GetId( metricName );
             string request = $"SELECT TIME(metric_date), Count(*) FROM metric_value WHERE id = {id} AND (metric_date BETWEEN CURRENT_TIME - INTERVAL 10 MINUTE AND CURRENT_TIME) GROUP BY MINUTE(metric_date)";
-            Dictionary<int, DateTime> data = new Dictionary<int, DateTime>();
+            Dictionary<int, int> data = new Dictionary<int, int>();
             using (MySqlConnection connect = GetConnection())
             {
                 MySqlCommand command = new MySqlCommand( request, connect );
                 MySqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    data.Add( Convert.ToInt32( reader[1] ), Convert.ToDateTime( reader[0].ToString() ) );
+                    data.Add((Convert.ToDateTime( reader[0].ToString() ).Minute), Convert.ToInt32( reader[1] ) );
                 }
             }
             return data;
@@ -178,6 +178,11 @@ namespace WebApi_MetricVisualization.Repository
                 }
             }
             return list;
+        }
+
+        Dictionary<int, DateTime> ISqlRepository.GetMetricByTime( string metricName )
+        {
+            throw new NotImplementedException();
         }
     }
 
