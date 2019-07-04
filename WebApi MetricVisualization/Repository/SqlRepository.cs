@@ -3,7 +3,6 @@ using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using WebApi_MetricVisualization.Models;
-using WebApi_MetricVisualization.MetricAgregator;
 
 namespace WebApi_MetricVisualization.Repository
 {
