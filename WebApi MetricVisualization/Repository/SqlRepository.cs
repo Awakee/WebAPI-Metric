@@ -158,7 +158,7 @@ namespace WebApi_MetricVisualization.Repository
                 MySqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    data.Add((Convert.ToDateTime( reader[0].ToString() ).Minute), Convert.ToInt32( reader[1] ) );
+                    data.Add( (Convert.ToDateTime( reader[0].ToString() ).Minute), Convert.ToInt32( reader[1] ) );
                 }
             }
             return data;
@@ -174,16 +174,12 @@ namespace WebApi_MetricVisualization.Repository
                 MySqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    list.Add( ( reader[0].ToString() ) );
+                    list.Add( (reader[0].ToString()) );
                 }
             }
             return list;
         }
 
-        Dictionary<int, DateTime> ISqlRepository.GetMetricByTime( string metricName )
-        {
-            throw new NotImplementedException();
-        }
     }
 
 }

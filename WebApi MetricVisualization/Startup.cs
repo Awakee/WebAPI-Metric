@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using WebApi_MetricVisualization.MetricAgregator;
 using WebApi_MetricVisualization.Repository;
 
 namespace WebApi_MetricVisualization
@@ -31,6 +32,7 @@ namespace WebApi_MetricVisualization
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddSingleton<IConfiguration>( Configuration );
             services.AddScoped<ISqlRepository, SqlRepository>();
+            services.AddScoped<IAgregator, Agregator>();
         }
 
 

@@ -12,62 +12,60 @@ namespace WebApi_MetricVisualization.Controllers
     [Route( "api/metric" )]
     public class MetricController : Controller
     {
-        
+        private readonly ISqlRepository _sqlRepository;
+        private readonly IAgregator _agregator;
+
+        public MetricController( IAgregator agregator, ISqlRepository sqlRepository )
+        {
+            _sqlRepository = sqlRepository;
+            _agregator = agregator;
+
+        }
         public IActionResult Index()
         {
-            ViewBag.result = SqlRepository.GetAllMetric();
+            ViewBag.result = _sqlRepository.GetAllMetric();
             return View();
-        }
-
-        private readonly SqlRepository SqlRepository;
-        private readonly Agregator Agregator;
-
-        public MetricController( IConfiguration config, ISqlRepository sqlRepository)
-        {
-            SqlRepository = new SqlRepository( config );
-            Agregator = new Agregator( config );
-
         }
 
         [HttpGet( "get/{metricName}" )]
         public Metric GetMetric( string metricName )
         {
-            return SqlRepository.GetMetrics( metricName );
+            return _sqlRepository.GetMetrics( metricName );
         }
 
         [HttpPost( "set/{metricName}" )]
         public void SetData( string metricName )
         {
-            SqlRepository.SetMetric( metricName );
+            _sqlRepository.SetMetric( metricName );
         }
 
         [HttpPost( "clear/{metricName}" )]
         public void ClearData( string metricName )
         {
-            SqlRepository.DeleteMetricValue( metricName );
+            _sqlRepository.DeleteMetricValue( metricName );
         }
 
         [HttpPost( "delete/{metricName}" )]
         public void DeleteData( string metricName )
         {
-            SqlRepository.DeleteMetric( metricName );
+            _sqlRepository.DeleteMetric( metricName );
         }
 
         [HttpGet( "info/{metricName}" )]
         public Dictionary<int, int> InfoMetric( string metricName )
         {
-            return SqlRepository.GetMetricByTime( metricName );
+            return _sqlRepository.GetMetricByTime( metricName );
         }
 
         [HttpGet( "interval/{metricName}" )]
         public Dictionary<int, (int, int)> Interval( string metricName )
         {
-            return Agregator.GetCounts( metricName );
-            
+            return _agregator.GetCounts( metricName );
+
         }
 
         [Route( "graph/{metricName}" )]
-        public IActionResult Graph(string metricName)
+        public IActionResult Graph( string metricName )
         {
             ViewBag.result = metricName;
             return View();

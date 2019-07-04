@@ -6,13 +6,14 @@
 
         function getData() {
             $.ajax({
-                url: "https://localhost:44367/api/metric/interval/" + metricName,
+                url: "/api/metric/interval/" + metricName,
                 success: function (data) {
                     setInterval(callback(data), 2000);
                 }
             });
 
             function callback(data) {
+
                 function renderData() {
                     var array = new Array;
                     for (var k in data) {
@@ -44,14 +45,9 @@
                     chart.data.datasets[0].data = count();
                     chart.update();
                 }
-
                 update(myLineChart);
-
             }
         }
-
-
-        
 
     var ctx = document.getElementById('myChart').getContext('2d');
     var myLineChart = new Chart(ctx, {
@@ -107,7 +103,6 @@
                     ticks: {
                         fontColor: "white",
                         fontSize: 18,
-                        stepSize: 1,
                         beginAtZero: true
                     }
                 }],

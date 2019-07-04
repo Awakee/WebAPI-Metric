@@ -1,12 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
-using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using WebApi_MetricVisualization.Repository;
 
 namespace WebApi_MetricVisualization.MetricAgregator
 {
-    public class Agregator
+    public class Agregator : IAgregator
     {
         private readonly SqlRepository SqlRepository;
         public Agregator( IConfiguration config )
@@ -15,7 +14,7 @@ namespace WebApi_MetricVisualization.MetricAgregator
         }
 
 
-        public Dictionary<int, (int, int)> GetCounts(string metricName)
+        public Dictionary<int, (int, int)> GetCounts( string metricName )
         {
             Dictionary<int, int> newdata = GetTimeInterval();
             Dictionary<int, int> data = SqlRepository.GetMetricByTime( metricName );
@@ -24,17 +23,18 @@ namespace WebApi_MetricVisualization.MetricAgregator
             foreach (var keyValue in newdata)
             {
                 {
-                    if (newdata.ContainsKey(keyValue.Key) == data.ContainsKey(keyValue.Key))
+                    if (newdata.ContainsKey( keyValue.Key ) == data.ContainsKey( keyValue.Key ))
                     {
                         result.Add( i++, (keyValue.Key, data[keyValue.Key]) );
-                    } else
+                    }
+                    else
                     {
                         result.Add( i++, (keyValue.Key, 0) );
                     }
                 }
-                
+
             }
-                return result;
+            return result;
         }
 
         public Dictionary<int, int> GetTimeInterval()
@@ -45,7 +45,7 @@ namespace WebApi_MetricVisualization.MetricAgregator
             Dictionary<int, int> datax = new Dictionary<int, int>();
             while (campare < 0)
             {
-                datax.Add(time.Minute,  0);
+                datax.Add( time.Minute, 0 );
                 time = time.AddMinutes( 1 );
                 campare = DateTime.Compare( time, DateTime.Now );
             }

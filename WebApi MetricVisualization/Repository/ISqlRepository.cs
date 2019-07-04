@@ -12,9 +12,10 @@ namespace WebApi_MetricVisualization.Repository
         void DeleteMetric( string metricName );
         void DeleteMetricName( string metricName );
         void DeleteMetricValue( string metricName );
+        List<string> GetAllMetric();
         MySqlConnection GetConnection();
         int GetId( string metricName );
-        Dictionary<int, DateTime> GetMetricByTime( string metricName );
+        Dictionary<int, int> GetMetricByTime( string metricName );
         Metric GetMetrics( string metricName );
         List<DateTime> GetMetricValues( int id );
         void SetMetric( string metricName );
