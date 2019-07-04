@@ -20,7 +20,6 @@ namespace WebApi_MetricVisualization
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
 
             WebHost.CreateDefaultBuilder(args)
-                .UseUrls( "https://*:44367" )
                 .UseContentRoot( Directory.GetCurrentDirectory() )
                 .UseIISIntegration()
                 .UseStartup<Startup>();

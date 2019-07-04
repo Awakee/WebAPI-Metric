@@ -19,7 +19,6 @@ namespace WebApi_MetricVisualization.Controllers
         {
             _sqlRepository = sqlRepository;
             _agregator = agregator;
-
         }
         public IActionResult Index()
         {
