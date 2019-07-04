@@ -16,8 +16,8 @@
 
 
 <body>
-    <div class="container revealator-once revealator-load revealator-slideright revealator-delay3 revealator-duration10">
-        <h1 class="revealator-once revealator-load  revealator-slidedown revealator-delay4 revealator-duration10">Available metrics</h1>
+    <div class="container">
+        <h1 >Available metrics</h1>
         @foreach (string result in ViewBag.result)
         {
             url = $"https://localhost:44367/api/metric/graph/{result}";

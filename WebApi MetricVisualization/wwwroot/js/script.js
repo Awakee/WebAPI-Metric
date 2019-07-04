@@ -1,40 +1,57 @@
 ﻿$(document).ready(function () {
-    var newmassive;
+    getData();
     setInterval(function () {
+        getData();
+    }, 3000);
 
-        $.ajax({
-            url: "https://localhost:44367/api/metric/interval/" + metricName,
-            success: function (data) {
-                setInterval(callback(data), 2000);
+        function getData() {
+            $.ajax({
+                url: "https://localhost:44367/api/metric/interval/" + metricName,
+                success: function (data) {
+                    setInterval(callback(data), 2000);
+                }
+            });
+
+            function callback(data) {
+                function renderData() {
+                    var array = new Array;
+                    for (var k in data) {
+                        array.push(Object.values(data[k]));
+                    }
+                    return array;
+                }
+
+                function time() {
+                    var array = new Array;
+                    var newData = renderData();
+                    for (var k in newData) {
+                        array.push(newData[k][0])
+                    }
+                    return array;
+                }
+
+                function count() {
+                    var array = new Array;
+                    var newData = renderData();
+                    for (var k in newData) {
+                        array.push(newData[k][1])
+                    }
+                    return array;
+                }
+
+                function update(chart) {
+                    chart.data.labels = time();
+                    chart.data.datasets[0].data = count();
+                    chart.update();
+                }
+
+                update(myLineChart);
+
             }
-        });
+        }
 
-        function callback(data) {
-            newmassive = data;
 
-            function time() {
-                var array2 = data;
-                return Object.keys(array2);
-            }
-
-            function count() {
-                var array = new Array;
-                for (var k in data) {
-                    array.push(data[k])
-                };
-                return array;
-            }
-
-            function update(chart) {
-                chart.data.labels = time();
-                chart.data.datasets[0].data = count();
-                chart.update();
-            }
-
-            update(myLineChart);
-
-        };
-    }, 3000 );
+        
 
     var ctx = document.getElementById('myChart').getContext('2d');
     var myLineChart = new Chart(ctx, {

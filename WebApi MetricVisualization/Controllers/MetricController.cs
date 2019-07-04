@@ -60,7 +60,7 @@ namespace WebApi_MetricVisualization.Controllers
         }
 
         [HttpGet( "interval/{metricName}" )]
-        public Dictionary<int, int> Interval( string metricName )
+        public Dictionary<int, (int, int)> Interval( string metricName )
         {
             return Agregator.GetCounts( metricName );
             

@@ -15,20 +15,21 @@ namespace WebApi_MetricVisualization.MetricAgregator
         }
 
 
-        public Dictionary<int, int> GetCounts(string metricName)
+        public Dictionary<int, (int, int)> GetCounts(string metricName)
         {
             Dictionary<int, int> newdata = GetTimeInterval();
             Dictionary<int, int> data = SqlRepository.GetMetricByTime( metricName );
-            Dictionary<int, int> result = new Dictionary<int, int>();
+            Dictionary<int, (int, int)> result = new Dictionary<int, (int, int)>();
+            int i = 0;
             foreach (var keyValue in newdata)
             {
                 {
                     if (newdata.ContainsKey(keyValue.Key) == data.ContainsKey(keyValue.Key))
                     {
-                        result.Add( keyValue.Key, data[keyValue.Key] );
+                        result.Add( i++, (keyValue.Key, data[keyValue.Key]) );
                     } else
                     {
-                        result.Add( keyValue.Key, 0 );
+                        result.Add( i++, (keyValue.Key, 0) );
                     }
                 }
                 
